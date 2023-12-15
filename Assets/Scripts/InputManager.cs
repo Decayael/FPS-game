@@ -19,6 +19,9 @@ public class InputManager : MonoBehaviour
         look = GetComponent<PlayerLook>();
         onFoot.Jump.performed += ctx => motor.Jump();
         onFoot.Sprinting.performed += ctx => motor.Sprinting();
+        onFoot.Shooting.performed += ctx => motor.Shooting();
+        onFoot.Shooting.performed += ctx => motor.SetAimingDirection(look.GetAimingDirection());
+
     }
 
     // Update is called once per frame

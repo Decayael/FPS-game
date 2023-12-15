@@ -37,6 +37,24 @@ public partial class @Playerinput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Shooting"",
+                    ""type"": ""Button"",
+                    ""id"": ""fac040b0-52d2-43d4-812f-4b493b2947ab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""a28447e9-f5e2-4348-ac6c-249e4f8f1b20"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""39449037-927b-45a0-a022-2e705db07a68"",
@@ -269,6 +287,50 @@ public partial class @Playerinput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""173b5d8e-fef7-4f6c-a4a9-ca016790167b"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d048ab35-7c1a-4e5f-abb4-86f344ee3b0a"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b596c27c-08af-4d17-b0a0-cca5857091e4"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shooting"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50f008d3-d046-41ee-a7b3-93f3c52d4bf1"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shooting"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -796,6 +858,8 @@ public partial class @Playerinput: IInputActionCollection2, IDisposable
         // onFoot
         m_onFoot = asset.FindActionMap("onFoot", throwIfNotFound: true);
         m_onFoot_Movement = m_onFoot.FindAction("Movement", throwIfNotFound: true);
+        m_onFoot_Shooting = m_onFoot.FindAction("Shooting", throwIfNotFound: true);
+        m_onFoot_Reload = m_onFoot.FindAction("Reload", throwIfNotFound: true);
         m_onFoot_Jump = m_onFoot.FindAction("Jump", throwIfNotFound: true);
         m_onFoot_Look = m_onFoot.FindAction("Look", throwIfNotFound: true);
         m_onFoot_Sprinting = m_onFoot.FindAction("Sprinting", throwIfNotFound: true);
@@ -874,6 +938,8 @@ public partial class @Playerinput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_onFoot;
     private List<IOnFootActions> m_OnFootActionsCallbackInterfaces = new List<IOnFootActions>();
     private readonly InputAction m_onFoot_Movement;
+    private readonly InputAction m_onFoot_Shooting;
+    private readonly InputAction m_onFoot_Reload;
     private readonly InputAction m_onFoot_Jump;
     private readonly InputAction m_onFoot_Look;
     private readonly InputAction m_onFoot_Sprinting;
@@ -883,6 +949,8 @@ public partial class @Playerinput: IInputActionCollection2, IDisposable
         private @Playerinput m_Wrapper;
         public OnFootActions(@Playerinput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_onFoot_Movement;
+        public InputAction @Shooting => m_Wrapper.m_onFoot_Shooting;
+        public InputAction @Reload => m_Wrapper.m_onFoot_Reload;
         public InputAction @Jump => m_Wrapper.m_onFoot_Jump;
         public InputAction @Look => m_Wrapper.m_onFoot_Look;
         public InputAction @Sprinting => m_Wrapper.m_onFoot_Sprinting;
@@ -899,6 +967,12 @@ public partial class @Playerinput: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
+            @Shooting.started += instance.OnShooting;
+            @Shooting.performed += instance.OnShooting;
+            @Shooting.canceled += instance.OnShooting;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
@@ -918,6 +992,12 @@ public partial class @Playerinput: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
+            @Shooting.started -= instance.OnShooting;
+            @Shooting.performed -= instance.OnShooting;
+            @Shooting.canceled -= instance.OnShooting;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
@@ -1068,6 +1148,8 @@ public partial class @Playerinput: IInputActionCollection2, IDisposable
     public interface IOnFootActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnShooting(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnSprinting(InputAction.CallbackContext context);
